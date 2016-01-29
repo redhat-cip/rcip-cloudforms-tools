@@ -13,15 +13,30 @@
 #
 
 #CHANGE ALL VARIABLES, those are just examples
-CLOUDFORMS_LATEST_QCOW2_URL="go to access.redhat.com -> download latest cloudforms and paste URL here"
-AUTHORIZED_SSH_IP="0.0.0.0/0" #0.0.0.0/0 for all
-CF_IMAGE_NAME="Red Hat CloudForms (v. 4.0 for x86_64)" #this is just a name
-MY_SSH_KEY="ssh-rsa replacethatincrediblelongkey jdoe@redhat.com" #paste your public key here
-KEY_NAME="John Doe" #your name here
-USER_EMAIL="jdoe@redhat.com"
+#CLOUDFORMS_LATEST_QCOW2_URL="go to access.redhat.com -> download latest cloudforms and paste URL with token here"
+#Example: https://access.cdn.redhat.com//content/origin/files/sha256/f1/f192c8b488431ec6e392f531671ecf85ee7d74d5de36eb1cb9b2ee0278d1b14b/cfme-rhos-5.5.0.13-2.x86_64.qcow2?_auth_=1454015285_772b8b5b0601c4289d8c837d53d5cdb4
+CLOUDFORMS_LATEST_QCOW2_URL=""
+#AUTHORIZED_SSH_IP="0.0.0.0/0" for all
+AUTHORIZED_SSH_IP=""
+#CF_IMAGE_NAME="Red Hat CloudForms (v. 4.0 for x86_64)" #This is just a name
+CF_IMAGE_NAME=""
+#MY_SSH_KEY="ssh-rsa replacethatincrediblelongkey jdoe@redhat.com"
+MY_SSH_KEY=""
+#KEY_NAME="John Doe" #your name here
+KEY_NAME="" 
+#USER_EMAIL="jdoe@redhat.com"
+USER_EMAIL=""
 
-#CONSTANTS, no need to change but you can rename those if you wish
-PUB_NET_NAME="public"
+#Check variables settings
+for variable in CLOUDFORMS_LATEST_QCOW2_URL AUTHORIZED_SSH_IP CF_IMAGE_NAME MY_SSH_KEY KEY_NAME USER_EMAIL; do
+    if [ -z "${!variable}" ]; then
+        echo "${variable} is not set, please edit setup_3nodes_cf.sh and set it before running this script"
+        exit 1
+    fi
+done
+
+#CONSTANTS, no need to change but you might need to make some changes depending on your OSP-d config
+PUB_NET_NAME="public" #IMPORTANT name of the external network, used to reserve and affect floating IPs
 PRV_NET_NAME="private network"
 PRV_SUB_NAME="private subnet"
 RTR_GTW_NAME="Gateway"
