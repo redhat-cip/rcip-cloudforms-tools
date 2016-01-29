@@ -7,8 +7,8 @@ That shell script sets up a complete cloudforms project on Openstack from an emp
 # Prerequisites
 - Ssh to a controller
 - Source the admin RC file
-- git clone git@github.com:toddoli/cloudformsOnOpenstack-setup.git
-- edit setup_3nodes_cf.sh and replace the variables in the first block
+- git clone git@github.com:redhat-cip/rcip-cloudforms-tools.git
+- edit deployment/openstack/setup_3nodes_cf.sh and replace the variables in the first block
 - Launch ./setup_3nodes_cf.sh
 
 # Post Installation
