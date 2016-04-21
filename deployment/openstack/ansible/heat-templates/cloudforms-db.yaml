@@ -1,0 +1,20 @@
+heat_template_version: 2015-04-30
+
+resources:
+  volume:
+    type: OS::Cinder::Volume
+    properties:
+      size: 80
+
+  volume_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: volume }
+      instance_uuid: { get_resource: instance }
+
+  instance:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: key_name }
+      image: { get_param: image_name } 
+      flavor: { get_param: flavor_name }

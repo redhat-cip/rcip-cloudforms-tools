@@ -1,0 +1,37 @@
+heat_template_version: 2015-04-30
+
+description: Cloudforms Reference Architecture
+
+parameters:
+  key_name:
+    type: string
+    label: Key Name
+    description: Name of key-pair to be used
+  flavor_name:
+    type: string
+    label: Flavor Name
+    description: Name of flavor to be used
+  image_name:
+    type: string
+    label: Image Name
+    description: Name of image to be used
+
+resources:
+  cloudforms-db:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: 1
+      resource_def: {type: cloudforms-db.yaml} 
+
+  cloudforms-webUI:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: 2
+      resource_def: {type: cloudforms-webUI.yaml} 
+
+  cloudforms-wkr:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: 2
+      resource_def: {type: cloudforms-wkr.yaml} 
+
