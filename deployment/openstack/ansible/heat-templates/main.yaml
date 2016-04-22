@@ -15,23 +15,52 @@ parameters:
     type: string
     label: Image Name
     description: Name of image to be used
+  internal_net:
+    type: string
+    label: Internet Net
+    description: Internal Network
+  internal_subnet:
+    type: string
+    label: Internet Subnet
+    description: Internal Subnet
 
 resources:
   cloudforms-db:
     type: OS::Heat::ResourceGroup
     properties:
       count: 1
-      resource_def: {type: cloudforms-db.yaml} 
+      resource_def:
+        type: cloudforms-db.yaml
+        properties:
+          key_name: { get_param: key_name }
+          image_name: { get_param: image_name }
+          flavor_name: { get_param: flavor_name }
+          
 
   cloudforms-webUI:
     type: OS::Heat::ResourceGroup
     properties:
       count: 2
-      resource_def: {type: cloudforms-webUI.yaml} 
+      resource_def:
+        type: cloudforms-webUI.yaml
+        properties:
+          key_name: { get_param: key_name }
+          image_name: { get_param: image_name }
+          flavor_name: { get_param: flavor_name }
 
   cloudforms-wkr:
     type: OS::Heat::ResourceGroup
     properties:
       count: 2
-      resource_def: {type: cloudforms-wkr.yaml} 
+      resource_def:
+        type: cloudforms-wkr.yaml
+        properties:
+          key_name: { get_param: key_name }
+          image_name: { get_param: image_name }
+          flavor_name: { get_param: flavor_name }
 
+  network:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: 1
+      resource_def: { type: network.yaml }

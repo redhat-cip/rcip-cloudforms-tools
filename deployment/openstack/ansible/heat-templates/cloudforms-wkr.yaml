@@ -1,5 +1,19 @@
 heat_template_version: 2015-04-30
 
+parameters:
+  key_name:
+    type: string
+    label: Key Name
+    description: Name of key-pair to be used
+  flavor_name:
+    type: string
+    label: Flavor Name
+    description: Name of flavor to be used
+  image_name:
+    type: string
+    label: Image Name
+    description: Name of image to be used
+
 resources:
   instance:
     type: OS::Nova::Server
@@ -7,3 +21,24 @@ resources:
       key_name: { get_param: key_name }
       image: { get_param: image_name }
       flavor: { get_param: flavor_name }
+      networks:
+         - network: { get_attr: [internal_net, name] }
+         - port: { get_attr: [public_port, name] }
+
+  public_ip:
+    type: OS::Neutron::FloatingIP
+    properties:
+      floating_network: public
+
+  floating_ip_association:
+    type: OS::Neutron::FloatingIPAssociation
+    properties:
+      floatingip_id: { get_resource: public_ip }
+      port_id: { get_resource: public_port }
+
+  public_port:
+    type: OS::Neutron::Port
+    properties:
+      network_id: { get_param: internal_net }
+      fixed_ips:
+      - subnet_id: { get_param: internal_subnet }
