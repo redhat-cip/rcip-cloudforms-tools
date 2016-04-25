@@ -22,7 +22,7 @@ parameters:
     type: string
     label: Name of the public network
     description: Public network name
-    default: internal_net
+    default: private_net
   private_subnet_name:
     type: string
     label: Name of the private subnet
