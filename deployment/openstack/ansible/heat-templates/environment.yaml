@@ -2,3 +2,4 @@ parameters:
   image_name: CloudForms 4.1 Beta CFME 5.6.0
   flavor_name: m1.large
   key_name: Fabien Cambi
+  public_net_name: public

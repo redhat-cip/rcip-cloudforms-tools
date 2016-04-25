@@ -1,6 +1,7 @@
 heat_template_version: 2015-04-30
 
-description: Cloudforms Reference Architecture
+description: >
+  Hot template to spin up a Cloudforms reference architecture on OpenStack, 1 DB, 2 WebUIs, 2 Workers.
 
 parameters:
   key_name:
@@ -11,20 +12,38 @@ parameters:
     type: string
     label: Flavor Name
     description: Name of flavor to be used
+    default: m1.medium
   image_name:
     type: string
     label: Image Name
     description: Name of image to be used
-  internal_net:
+    default: CloudForms 4.0 CFME 5.5.2
+  public_net_name:
     type: string
-    label: Internet Net
-    description: Internal Network
-  internal_subnet:
+    label: Name of the public network
+    description: Public network name
+    default: public
+  private_net_name:
     type: string
-    label: Internet Subnet
-    description: Internal Subnet
+    label: Name of the public network
+    description: Public network name
+    default: private_net
+  private_subnet_name:
+    type: string
+    label: Name of the public network
+    description: Public network name
+    default: internal_subnet
+  private_net_cidr:
+    type: string
+    description: Private network address (CIDR notation)
+    default: 192.168.0.0/24
+  dns_nameservers:
+    type: comma_delimited_list
+    description: DNS servers
+    default: ["8.8.8.8","8.8.4.4"]
 
 resources:
+#Appliances
   cloudforms-db:
     type: OS::Heat::ResourceGroup
     properties:
@@ -35,6 +54,8 @@ resources:
           key_name: { get_param: key_name }
           image_name: { get_param: image_name }
           flavor_name: { get_param: flavor_name }
+          public_net_name: { get_param: public_net_name }
+          private_subnet_name: { get_resource: private_subnet }
           
 
   cloudforms-webUI:
@@ -47,6 +68,9 @@ resources:
           key_name: { get_param: key_name }
           image_name: { get_param: image_name }
           flavor_name: { get_param: flavor_name }
+          public_net_name: { get_param: public_net_name }
+          private_net_name: { get_resource: private_net }
+          private_subnet_name: { get_resource: private_subnet }
 
   cloudforms-wkr:
     type: OS::Heat::ResourceGroup
@@ -58,9 +82,32 @@ resources:
           key_name: { get_param: key_name }
           image_name: { get_param: image_name }
           flavor_name: { get_param: flavor_name }
+          public_net_name: { get_param: public_net_name }
+          private_net_name: { get_resource: private_net }
+          private_subnet_name: { get_resource: private_subnet }
 
-  network:
-    type: OS::Heat::ResourceGroup
+#Network
+  private_net:
+    type: OS::Neutron::Net
     properties:
-      count: 1
-      resource_def: { type: network.yaml }
+      name: { get_param: private_net_name }
+
+  private_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      network_id: { get_resource: private_net }
+      cidr: { get_param: private_net_cidr }
+      dns_nameservers:  {get_param: dns_nameservers }
+
+  router:
+    type: OS::Neutron::Router
+    properties:
+      external_gateway_info:
+        network: { get_param: public_net_name }
+
+  internal_interface:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router: { get_resource: router }
+      subnet: { get_resource: private_subnet }
+  
