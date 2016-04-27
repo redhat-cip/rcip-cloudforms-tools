@@ -55,7 +55,9 @@ resources:
           image_name: { get_param: image_name }
           flavor_name: { get_param: flavor_name }
           public_net_name: { get_param: public_net_name }
+          private_net_name: { get_resource: private_net }
           private_subnet_name: { get_resource: private_subnet }
+          instance_name: cloudforms-db%index%
           
 
   cloudforms-webUI:
@@ -71,6 +73,7 @@ resources:
           public_net_name: { get_param: public_net_name }
           private_net_name: { get_resource: private_net }
           private_subnet_name: { get_resource: private_subnet }
+          instance_name: cloudforms-webUI%index%
 
   cloudforms-wkr:
     type: OS::Heat::ResourceGroup
@@ -85,6 +88,7 @@ resources:
           public_net_name: { get_param: public_net_name }
           private_net_name: { get_resource: private_net }
           private_subnet_name: { get_resource: private_subnet }
+          instance_name: cloudforms-wkr%index%
 
 #Network
   private_net:

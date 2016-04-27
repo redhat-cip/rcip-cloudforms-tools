@@ -28,6 +28,10 @@ parameters:
     label: Name of the private subnet
     description: Private subnet name
     default: private_subnet
+  instance_name:
+    type: string
+    label: Instance Name
+    description: Name of the instance
 
 resources:
   volume:
@@ -35,11 +39,12 @@ resources:
     properties:
       size: 80
 
-  volume_attachment:
-    type: OS::Cinder::VolumeAttachment
+  public_port:
+    type: OS::Neutron::Port
     properties:
-      volume_id: { get_resource: volume }
-      instance_uuid: { get_resource: instance }
+      network_id: { get_param: private_net_name}
+      fixed_ips:
+        - subnet_id: { get_param: private_subnet_name }
 
   instance:
     type: OS::Nova::Server
@@ -47,8 +52,15 @@ resources:
       key_name: { get_param: key_name }
       image: { get_param: image_name } 
       flavor: { get_param: flavor_name }
+      name: { get_param: instance_name }
       networks:
          - port: { get_resource: public_port }
+
+  volume_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: volume }
+      instance_uuid: { get_resource: instance }
 
   public_ip:
     type: OS::Neutron::FloatingIP
@@ -61,9 +73,3 @@ resources:
       floatingip_id: { get_resource: public_ip }
       port_id: { get_resource: public_port }
 
-  public_port:
-    type: OS::Neutron::Port
-    properties:
-      network_id: { get_param: private_net_name}
-      fixed_ips:
-      - subnet_id: { get_param: private_subnet_name }
