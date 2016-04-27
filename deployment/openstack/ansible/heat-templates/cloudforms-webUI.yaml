@@ -47,6 +47,8 @@ resources:
       name: { get_param: instance_name }
       networks:
          - port: { get_resource: public_port }
+      metadata:
+        group: webUI
 
   public_ip:
     type: OS::Neutron::FloatingIP

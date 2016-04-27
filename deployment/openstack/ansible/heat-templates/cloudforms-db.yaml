@@ -60,6 +60,8 @@ resources:
       name: { get_param: instance_name }
       networks:
          - port: { get_resource: public_port }
+      metadata:
+        group: database
 
   volume_attachment:
     type: OS::Cinder::VolumeAttachment
