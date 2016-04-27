@@ -32,6 +32,10 @@ parameters:
     type: string
     label: Instance Name
     description: Name of the instance
+  security_group_name:
+    type: string
+    label: Security Group Name
+    description: Name of the default Cloudforms Security Group
 
 resources:
   instance:
@@ -61,3 +65,4 @@ resources:
       network_id: { get_param: private_net_name}
       fixed_ips:
         - subnet_id: { get_param: private_subnet_name }
+      security_groups: [{ get_param: security_group_name }]

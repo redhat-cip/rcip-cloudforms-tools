@@ -20,27 +20,38 @@ parameters:
     default: CloudForms 4.0 CFME 5.5.2
   public_net_name:
     type: string
-    label: Name of the public network
-    description: Public network name
+    label: Public network name
+    description: Name of the public network
     default: public
   private_net_name:
     type: string
-    label: Name of the public network
-    description: Public network name
+    label: Private network name
+    description: Name of the private network
     default: private_net
   private_subnet_name:
     type: string
-    label: Name of the public network
-    description: Public network name
+    label: Private subnet name
+    description: Name of the private subnet
     default: internal_subnet
   private_net_cidr:
     type: string
+    label: Private Network CIDR
     description: Private network address (CIDR notation)
     default: 192.168.0.0/24
   dns_nameservers:
     type: comma_delimited_list
     description: DNS servers
     default: ["8.8.8.8","8.8.4.4"]
+  source_ssh:
+    type: string
+    label: Source IP for SSH
+    description: Authorized IP to SSH to appliance (CIDR)
+    default: 0.0.0.0/0
+  security_group_name:
+    type: string
+    label: Security Group Name
+    description: Name of the default Cloudforms Security Group
+    default: default_cloudforms
 
 resources:
 #Appliances
@@ -58,6 +69,7 @@ resources:
           private_net_name: { get_resource: private_net }
           private_subnet_name: { get_resource: private_subnet }
           instance_name: cloudforms-db%index%
+          security_group_name: { get_param: security_group_name }
           
 
   cloudforms-webUI:
@@ -74,6 +86,7 @@ resources:
           private_net_name: { get_resource: private_net }
           private_subnet_name: { get_resource: private_subnet }
           instance_name: cloudforms-webUI%index%
+          security_group_name: { get_param: security_group_name }
 
   cloudforms-wkr:
     type: OS::Heat::ResourceGroup
@@ -89,6 +102,7 @@ resources:
           private_net_name: { get_resource: private_net }
           private_subnet_name: { get_resource: private_subnet }
           instance_name: cloudforms-wkr%index%
+          security_group_name: { get_param: security_group_name }
 
 #Network
   private_net:
@@ -115,3 +129,20 @@ resources:
       router: { get_resource: router }
       subnet: { get_resource: private_subnet }
   
+  security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      description: Minimal Cloudforms Security Group
+      name: { get_param: security_group_name }
+      rules:
+        - protocol: icmp
+        - protocol: tcp
+          port_range_min: 443
+          port_range_max: 443
+        - protocol: tcp
+          port_range_min: 80
+          port_range_max: 80
+        - protocol: tcp
+          port_range_min: 22
+          port_range_max: 22
+          remote_ip_prefix: { get_param: source_ssh }

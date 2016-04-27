@@ -4,3 +4,4 @@ parameters:
   key_name: Fabien Cambi
   public_net_name: public
   private_net_name: private_net
+  source_ssh: 0.0.0.0/0
