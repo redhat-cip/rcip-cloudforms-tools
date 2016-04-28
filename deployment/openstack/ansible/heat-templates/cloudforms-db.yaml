@@ -49,7 +49,7 @@ resources:
       network_id: { get_param: private_net_name}
       fixed_ips:
         - subnet_id: { get_param: private_subnet_name }
-      security_groups: [{ get_param: security_group_name }]
+      security_groups: [{ get_param: security_group_name }, { get_resource: security_group_db }]
 
   instance:
     type: OS::Nova::Server
@@ -80,3 +80,16 @@ resources:
       floatingip_id: { get_resource: public_ip }
       port_id: { get_resource: public_port }
 
+  security_group_db:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      description: SSH and Psql access for all appliances to DB
+#TODO limit to the appliances ONLY
+      name: security_group_db
+      rules:
+        - protocol: tcp
+          port_range_min: 22
+          port_range_max: 22
+        - protocol: tcp
+          port_range_min: 5432
+          port_range_max: 5432
