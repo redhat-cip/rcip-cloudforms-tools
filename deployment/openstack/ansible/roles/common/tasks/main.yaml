@@ -1,0 +1,4 @@
+---
+#- name: Setup hostname in /etc/hosts
+#  command: appliance_console_cli -H {{ inventory_hostname }}
+

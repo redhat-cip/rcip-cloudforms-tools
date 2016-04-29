@@ -1,0 +1,8 @@
+---
+- name: Install Worker appliance
+  hosts: worker
+  remote_user: root
+
+  roles:
+    - common
+    - worker

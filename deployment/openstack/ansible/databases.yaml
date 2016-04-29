@@ -1,0 +1,8 @@
+---
+- name: Install DB appliance
+  hosts: database
+  remote_user: root
+
+  roles:
+    - common
+    - database

@@ -1,0 +1,8 @@
+---
+- name: Install WebUI appliance
+  hosts: webUI
+  remote_user: root
+
+  roles:
+    - common
+    - webUI
