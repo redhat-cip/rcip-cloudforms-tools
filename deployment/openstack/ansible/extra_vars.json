@@ -1,0 +1,3 @@
+rhn_login:          CHANGEME@redhat.com
+rhn_password:       CHANGEME
+sensu_server_ip:    CHANGEME

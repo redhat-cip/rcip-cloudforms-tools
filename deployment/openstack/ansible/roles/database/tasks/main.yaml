@@ -1,3 +1,8 @@
 ---
 - name: Setup region number
   command: appliance_console_cli -H {{ inventory_hostname }} -r 99 -i -h localhost -U root -p smartvm
+
+- name: Configure sensu psql check
+  copy: src=psql.json dest=/etc/sensu/conf.d/psql.json owner=root group=root mode=0644
+  tags:
+    - sensu

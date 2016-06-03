@@ -1,0 +1,10 @@
+{
+   "checks": {
+    "pgsql": {
+      "standalone": true,
+      "handlers": ["default", "email"],
+      "command": "/usr/lib64/nagios/plugins/check_pgsql -d vmdb_production -l root -p smartvm -H localhost",
+      "interval": 60
+    }
+   }
+}

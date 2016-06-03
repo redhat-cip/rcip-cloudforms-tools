@@ -2,7 +2,7 @@ parameters:
   #image_name: CloudForms 4.1 Beta CFME 5.6.0
   image_name: CloudForms 4.0 CFME 5.5.2
   flavor_name: m1.large
-  key_name: Fabien Cambi
+  key_name: John Doe
   public_net_name: public
   private_net_name: private_net
   source_ssh: 0.0.0.0/0
