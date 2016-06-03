@@ -34,11 +34,6 @@
   tags:
     - sensu
 
-- name: Configure Sensu client checks
-  template: src=sensu/standalone-checks.j2 dest=/etc/sensu/conf.d/standalone-checks.json owner=root group=root mode=0644
-  tags:
-    - sensu
-
 - name: Restart sensu-client
   service: name=sensu-client state=restarted
   tags:
