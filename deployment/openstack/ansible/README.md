@@ -23,7 +23,7 @@ That Ansible Playbook sets up a complete cloudforms project on Openstack from an
 source my-cloudforms-tenant.rc
 git clone git@github.com:redhat-cip/rcip-cloudforms-tools.git
 cd rcip-cloudforms-tools/deployment/openstack/ansible
-openstack stack update cloudforms-db -e heat-templates/environment.yaml -f yaml -t heat-templates/main.yaml
+openstack stack create cloudforms-full -e heat-templates/environment.yaml -f yaml -t heat-templates/main.yaml
 ansible-playbook -i dynamic_inventory.py main.yaml -u root -k -e "@extra_vars.json"
 ```
 
