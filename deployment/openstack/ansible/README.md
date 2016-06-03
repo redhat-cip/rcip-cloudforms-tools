@@ -13,7 +13,10 @@ That Ansible Playbook sets up a complete cloudforms project on Openstack from an
     - 3 Security Groups
     - 1 Volume
     - 80G Volume Storage
+
+# Some examples are given but must be replaced with your values:
 - edit deployment/openstack/ansible/heat-templates/environment.yaml and replace the values
+- edit deployment/openstack/ansible/extra_vars.json and replace the values
 
 # Launch
 ```
@@ -21,7 +24,7 @@ source my-cloudforms-tenant.rc
 git clone git@github.com:redhat-cip/rcip-cloudforms-tools.git
 cd rcip-cloudforms-tools/deployment/openstack/ansible
 openstack stack update cloudforms-db -e heat-templates/environment.yaml -f yaml -t heat-templates/main.yaml
-ansible-playbook -i dynamic_inventory.py main.yaml -u root -k
+ansible-playbook -i dynamic_inventory.py main.yaml -u root -k -e "@extra_vars.json"
 ```
 
 # Deactivate/Activate useful roles on the appliances
