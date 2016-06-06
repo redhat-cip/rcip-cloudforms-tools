@@ -3,13 +3,13 @@
     "httpd_HTTP": {
       "standalone": true,
       "handlers": ["default", "email"],
-      "command": "/usr/lib64/nagios/plugins/check_http -I {{ ansible_eth0.ipv4.address }}"
+      "command": "/usr/lib64/nagios/plugins/check_http -I {{ ansible_eth0.ipv4.address }}",
       "interval": 60
     },
     "httpd_HTTPS": {
       "standalone": true,
       "handlers": ["default", "email"],
-      "command": "/usr/lib64/nagios/plugins/check_http --sni -S -I {{ ansible_eth0.ipv4.address }}"
+      "command": "/usr/lib64/nagios/plugins/check_http --sni -S -I {{ ansible_eth0.ipv4.address }}",
       "interval": 60
     }
    }
