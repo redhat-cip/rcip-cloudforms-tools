@@ -1,3 +1,3 @@
 ---
 - name: Setup external DB and region number
-  command: appliance_console_cli -r 99 -H {{ inventory_hostname }} -h {{ hostvars['cloudforms-db0'].ansible_ssh_host }} -U root -p smartvm -K {{ hostvars['cloudforms-db0'].ansible_ssh_host }} -s root -a smartvm
+  command: appliance_console_cli -r {{ region_number }} -H {{ inventory_hostname }} -h {{ hostvars['cloudforms-db0'].ansible_ssh_host }} -U root -p smartvm -K {{ hostvars['cloudforms-db0'].ansible_ssh_host }} -s root -a smartvm
