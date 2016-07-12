@@ -12,7 +12,8 @@ That Ansible Playbook sets up a complete cloudforms project on Openstack from an
     - 5 Floating IPs
     - 3 Security Groups
     - 1 Volume
-    - 80G Volume Storage
+    - 80G Volume Storage per instance
+    - 1 imported public key
 
 # Some examples are given but must be replaced with your values:
 - edit deployment/openstack/ansible/heat-templates/environment.yaml and replace the values
